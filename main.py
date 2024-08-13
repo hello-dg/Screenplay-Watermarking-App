@@ -11,6 +11,7 @@ root = tk.Tk()
 root.title("Watermark It!")
 root.geometry('400x300')
 root.config(bg='#fefefe')
+root.iconbitmap('assets/icons/drop.ico')
 
 # Create and pack the widgets
 label = tk.Label(root, text="If you haven't already... Watermark It!", font=('Rockwell', 14), fg='#7393B3', bg='#fefefe')
