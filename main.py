@@ -34,6 +34,27 @@ def create_watermark():
     watermark_pdf()
 
 
+def watermark_pdf():
+    global pdf_upload
+    global pdf_download
+    watermark = 'watermark.pdf'
+
+    with open(pdf_upload, 'rb') as input_file, open(watermark, "rb") as watermark_file:
+        input_pdf = PdfReader(input_file)
+        watermark_pdf = PdfReader(watermark_file)
+        watermark_page = watermark_pdf.pages[0]
+
+        output = PdfWriter()
+
+        for i in range(len(input_pdf.pages)):
+            pdf_page = input_pdf.pages[i]
+            pdf_page.merge_page(watermark_page)
+            output.add_page(pdf_page)
+
+        with open(pdf_download, 'wb') as merged_file:
+            output.write(merged_file)
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Watermark It!")
