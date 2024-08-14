@@ -1,54 +1,37 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from pdfrw import PdfReader, PdfWriter, PageMerge
-# from PyPDF2 import PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from PyPDF2 import PdfReader, PdfWriter
+import os
 
 # Global Variables
-file_path = 'assets/pdf/test.pdf'
-watermark_text = 'assets/pdf/wmtest.pdf'
-output = 'assets/pdf/endtest.pdf'
+pdf_upload = 'assets/pdf/test.pdf'
+downloads_folder = os.path.expanduser('~/Downloads')
+pdf_download = os.path.join(downloads_folder, 'Watermarked_File.pdf')
 
 
-# Function to handle button click
-def on_button_click():
-    print("Button Works")
-
-
+# Functions
 def upload_file():
-    global file_path
+    global pdf_upload
     permitted_file_types = [("PDF files", '*.pdf')]
-    file_path = filedialog.askopenfilename(filetypes=permitted_file_types)
-    if file_path:
-        print(f"File selected: {file_path}")
+    pdf_upload = filedialog.askopenfilename(filetypes=permitted_file_types)
+    if pdf_upload:
+        print(f"File selected: {pdf_upload}")
 
 
-def get_watermark_entry():
-    global watermark_text
-    watermark_text = watermark_entry.get()
-    print(watermark_text)
-
-
-def get_pdf_info():
-    global file_path
-    pdf = PdfReader(file_path)
-
-    print(pdf.Info)
-    print(pdf.Root.keys())
-    print('PDF has {} pages'.format(len(pdf.pages)))
-
-
-def watermark_pdf():
-    global file_path, watermark_text, output
-    pdf = PdfReader(file_path)
-    watermark = PdfReader(watermark_text)
-    pages_to_mark = watermark.pages[0]
-
-    for page in range(len(pdf.pages)):
-        merger = PageMerge(pdf.pages[page])
-        merger.add(pages_to_mark).render()
-
-    writer = PdfWriter()
-    writer.write(output, pdf)
+def create_watermark():
+    text = watermark_entry.get()
+    pdf = canvas.Canvas('watermark.pdf', pagesize=A4)
+    pdf.translate(inch, inch)
+    pdf.setFillColor(colors.gainsboro, alpha=0.6)
+    pdf.setFont('Helvetica', 50)
+    pdf.rotate(45)
+    pdf.drawCentredString(400, 100, text)
+    pdf.save()
+    watermark_pdf()
 
 
 # Create the main window
@@ -71,7 +54,7 @@ label.pack(pady=10)
 watermark_entry = tk.Entry(root, font=('Rockwell', 12))
 watermark_entry.pack(pady=10)
 
-button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=watermark_pdf)
+button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=create_watermark)
 button.pack(pady=10)
 
 # Start the Tkinter event loop
