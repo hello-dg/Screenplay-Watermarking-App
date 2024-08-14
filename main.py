@@ -4,7 +4,9 @@ from pdfrw import PdfReader, PdfWriter, PageMerge
 # from PyPDF2 import PdfReader, PdfWriter
 
 # Global Variables
-file_path = 'assets/pdf/start.pdf'
+file_path = 'assets/pdf/test.pdf'
+watermark_text = 'assets/pdf/wmtest.pdf'
+output = 'assets/pdf/endtest.pdf'
 
 
 # Function to handle button click
@@ -21,6 +23,7 @@ def upload_file():
 
 
 def get_watermark_entry():
+    global watermark_text
     watermark_text = watermark_entry.get()
     print(watermark_text)
 
@@ -32,6 +35,20 @@ def get_pdf_info():
     print(pdf.Info)
     print(pdf.Root.keys())
     print('PDF has {} pages'.format(len(pdf.pages)))
+
+
+def watermark_pdf():
+    global file_path, watermark_text, output
+    pdf = PdfReader(file_path)
+    watermark = PdfReader(watermark_text)
+    pages_to_mark = watermark.pages[0]
+
+    for page in range(len(pdf.pages)):
+        merger = PageMerge(pdf.pages[page])
+        merger.add(pages_to_mark).render()
+
+    writer = PdfWriter()
+    writer.write(output, pdf)
 
 
 # Create the main window
@@ -54,7 +71,7 @@ label.pack(pady=10)
 watermark_entry = tk.Entry(root, font=('Rockwell', 12))
 watermark_entry.pack(pady=10)
 
-button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=get_pdf_info)
+button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=watermark_pdf)
 button.pack(pady=10)
 
 # Start the Tkinter event loop
