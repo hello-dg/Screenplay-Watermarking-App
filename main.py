@@ -20,16 +20,6 @@ def upload_file():
         print(f"File selected: {file_path}")
 
 
-def generate_text_for_watermarking(text, font_size=36):
-    font = ImageFont.truetype('arial.ttf', font_size)
-    text_size = font_size
-    background = Image.new('RGBA', text_size, (255, 255, 255, 0))
-    draw = ImageDraw.Draw(background)
-    draw.text((0, 0), text, font=font, fill=(0, 0, 0, 128))
-
-    return background
-
-
 # Create the main window
 root = tk.Tk()
 root.title("Watermark It!")
