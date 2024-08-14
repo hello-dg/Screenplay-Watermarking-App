@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
-from PyPDF2 import PdfReader, PdfWriter
+from pdfrw import PdfReader, PdfWriter, PageMerge
+# from PyPDF2 import PdfReader, PdfWriter
 
 # Global Variables
-file_path = 'yes'
+file_path = 'assets/pdf/start.pdf'
 
 
 # Function to handle button click
@@ -22,6 +23,15 @@ def upload_file():
 def get_watermark_entry():
     watermark_text = watermark_entry.get()
     print(watermark_text)
+
+
+def get_pdf_info():
+    global file_path
+    pdf = PdfReader(file_path)
+
+    print(pdf.Info)
+    print(pdf.Root.keys())
+    print('PDF has {} pages'.format(len(pdf.pages)))
 
 
 # Create the main window
@@ -44,7 +54,7 @@ label.pack(pady=10)
 watermark_entry = tk.Entry(root, font=('Rockwell', 12))
 watermark_entry.pack(pady=10)
 
-button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=get_watermark_entry)
+button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=get_pdf_info)
 button.pack(pady=10)
 
 # Start the Tkinter event loop
