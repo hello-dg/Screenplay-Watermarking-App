@@ -20,6 +20,11 @@ def upload_file():
         print(f"File selected: {file_path}")
 
 
+def get_watermark_entry():
+    watermark_text = watermark_entry.get()
+    print(watermark_text)
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Watermark It!")
@@ -37,10 +42,10 @@ button.pack(pady=10)
 label = tk.Label(root, text="Watermark Text:", font=('Rockwell', 12), fg='#7393B3', bg='#fefefe')
 label.pack(pady=10)
 
-watermark_entry = tk.Entry(root)
+watermark_entry = tk.Entry(root, font=('Rockwell', 12))
 watermark_entry.pack(pady=10)
 
-button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=on_button_click)
+button = tk.Button(root, text="Watermark It!", font=('Rockwell', 12), fg="#ffffff", bg='#7393B3', command=get_watermark_entry)
 button.pack(pady=10)
 
 # Start the Tkinter event loop
